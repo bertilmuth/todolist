@@ -1,7 +1,7 @@
 # What this project is about
 [![Build Status](https://travis-ci.org/bertilmuth/todolist.svg?branch=master)](https://travis-ci.org/bertilmuth/todolist)
 
-This project is a small to do list app that allows users to add, remove and edit to do list items.
+This project is a small todo list app that allows users to add, remove and edit todo list items.
 The whole purpose of this app is to showcase which patterns to use for undoing/redoing user actions,
 without changing  existing domain classes.
 
@@ -13,6 +13,5 @@ without changing  existing domain classes.
 
 
 # How it works internally
-* The [TodoList class](https://github.com/bertilmuth/todolist/blob/master/src/main/java/todolist/TodoList.java) represents the domain knowledge:
-you can add, remove and edit items. A simple, zero-based index called _itemNumber_ is used to access specific items. 
+* The [TodoList class](https://github.com/bertilmuth/todolist/blob/master/src/main/java/todolist/TodoList.java) represents the domain knowledge: you can add, remove and edit items. A simple, zero-based index called _itemNumber_ is used to access specific items. 
 * The [UndoableTodoList class](https://github.com/bertilmuth/todolist/blob/master/src/main/java/todolist/UndoableTodoList.java) is an adapter to the `TodoList` class that implements the same interface. Besides delegating to its own `TodoList` instance, it also keeps tracks of undo/redo commands.
