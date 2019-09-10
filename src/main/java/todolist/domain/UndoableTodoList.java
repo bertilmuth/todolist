@@ -25,10 +25,10 @@ public class UndoableTodoList implements IPlanToDoThings {
 	public void addItem(String itemText) {
 		final int newItemNumber = numberOfItems();
 
-		final Consumer<TodoList> redoCommand = todoList -> todoList.addItem(itemText);
+		final Consumer<TodoList> command = todoList -> todoList.addItem(itemText);
 		final Consumer<TodoList> undoCommand = todoList -> todoList.removeItem(newItemNumber);
 
-		processCommandAndUndoCommand(redoCommand, undoCommand);
+		processCommandAndUndoCommand(command, undoCommand);
 	}
 
 	@Override
