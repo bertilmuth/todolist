@@ -19,7 +19,7 @@ public class UndoableTodoList implements IPlanToDoThings {
 	public void addItem(String itemText) {
 		final int newItemNumber = numberOfItems();
 
-		final Consumer<TodoList> command = todoList -> todoList.insertItem(newItemNumber, itemText);
+		final Consumer<TodoList> command = todoList -> todoList.addItem(itemText);
 		executeOnTodoList(command);
 		todoListRedoCommands.push(command);
 
