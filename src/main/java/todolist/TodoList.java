@@ -14,13 +14,13 @@ class TodoList implements IPlanToDoThings {
 	public void addItem(String itemText) {
 		items.add(new Item(itemText));
 	}
-	
+
 	@Override
 	public void removeItem(int itemNumber) {
 		ifInvalidThrowIllegalArgumentException(itemNumber);
 		items.remove(itemNumber);
 	}
-	
+
 	@Override
 	public void editItem(int itemNumber, String newText) {
 		ifInvalidThrowIllegalArgumentException(itemNumber);
@@ -29,7 +29,11 @@ class TodoList implements IPlanToDoThings {
 	}
 
 	@Override
-	public Item item(int itemNumber) {
+	public String itemText(int itemNumber) {
+		ifInvalidThrowIllegalArgumentException(itemNumber);
+		return item(itemNumber).text();
+	}
+	Item item(int itemNumber) {
 		ifInvalidThrowIllegalArgumentException(itemNumber);
 		return items.get(itemNumber);
 	}
@@ -39,11 +43,16 @@ class TodoList implements IPlanToDoThings {
 		return items.size();
 	}
 	
+	void insertItem(int itemNumber, Item itemToBeInserted) {
+		items.add(itemNumber, itemToBeInserted);
+	}
+
 	private void ifInvalidThrowIllegalArgumentException(int itemNumber) {
 		if (isItemNumberInvalid(itemNumber)) {
 			throw new IllegalArgumentException("Item number " + itemNumber + " is invalid");
 		}
 	}
+
 	private boolean isItemNumberInvalid(int itemNumber) {
 		return itemNumber < 0 || itemNumber >= numberOfItems();
 	}
@@ -51,7 +60,7 @@ class TodoList implements IPlanToDoThings {
 	public class Item {
 		private final String text;
 
-		public Item(String text) {
+		private Item(String text) {
 			this.text = text;
 		}
 

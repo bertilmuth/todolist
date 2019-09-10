@@ -1,7 +1,5 @@
 package todolist;
 
-import todolist.TodoList.Item;
-
 public interface IPlanToDoThings {
 
 	void addItem(String itemText);
@@ -10,7 +8,7 @@ public interface IPlanToDoThings {
 
 	void editItem(int itemNumber, String newText);
 
-	Item item(int itemNumber);
+	String itemText(int itemNumber);
 
 	int numberOfItems();
 
