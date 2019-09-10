@@ -15,7 +15,7 @@ public class TodoListTest {
 
 	@Before
 	public void setUp() throws Exception {
-		todoList = new TodoList();
+		todoList = new UndoableTodoList();
 	}
 
 	@Test
