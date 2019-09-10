@@ -14,10 +14,10 @@ public class UndoableTodoList implements IPlanToDoThings {
 		this.undoRedoCommands = new ArrayDeque<>();
 		this.redoCommands = new ArrayDeque<>();
 	}
-	
-	void process(final Consumer<TodoList> undoCommand, final Consumer<TodoList> redoCommand) {
-		executeOnTodoList(redoCommand);
-		UndoRedoCommand undoRedoCommand = new UndoRedoCommand(undoCommand, redoCommand);
+
+	void processCommandAndUndo(final Consumer<TodoList> command, final Consumer<TodoList> undoCommand) {
+		executeOnTodoList(command);
+		UndoRedoCommand undoRedoCommand = new UndoRedoCommand(undoCommand, command);
 		undoRedoCommands.push(undoRedoCommand);
 	}
 
@@ -25,30 +25,30 @@ public class UndoableTodoList implements IPlanToDoThings {
 	public void addItem(String itemText) {
 		final int newItemNumber = numberOfItems();
 
-		final Consumer<TodoList> undoCommand = todoList -> todoList.removeItem(newItemNumber);
 		final Consumer<TodoList> redoCommand = todoList -> todoList.addItem(itemText);
+		final Consumer<TodoList> undoCommand = todoList -> todoList.removeItem(newItemNumber);
 
-		process(undoCommand, redoCommand);
+		processCommandAndUndo(redoCommand, undoCommand);
 	}
-
-
 
 	@Override
 	public void removeItem(int itemNumber) {
 		final String itemToBeRemovedText = todoList.item(itemNumber).text();
-		
+
+		final Consumer<TodoList> command = todoList -> todoList.removeItem(itemNumber);
 		final Consumer<TodoList> undoCommand = todoList -> todoList.insertItem(itemNumber, itemToBeRemovedText);
-		final Consumer<TodoList> redoCommand = todoList -> todoList.removeItem(itemNumber);
-		process(undoCommand, redoCommand);
+
+		processCommandAndUndo(command, undoCommand);
 	}
 
 	@Override
 	public void editItem(int itemNumber, String newText) {
 		final String oldText = todoList.itemText(itemNumber);
-		
+
+		final Consumer<TodoList> command = todoList -> todoList.editItem(itemNumber, newText);
 		final Consumer<TodoList> undoCommand = todoList -> todoList.editItem(itemNumber, oldText);
-		final Consumer<TodoList> redoCommand = todoList -> todoList.editItem(itemNumber, newText);
-		process(undoCommand, redoCommand);
+
+		processCommandAndUndo(command, undoCommand);
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class UndoableTodoList implements IPlanToDoThings {
 		UndoRedoCommand undoRedoCommand = undoRedoCommands.pop();
 		Consumer<TodoList> undoCommand = undoRedoCommand.undoCommmand();
 		Consumer<TodoList> redoCommand = undoRedoCommand.redoCommmand();
-		
+
 		executeOnTodoList(undoCommand);
 		redoCommands.push(redoCommand);
 	}
@@ -80,19 +80,19 @@ public class UndoableTodoList implements IPlanToDoThings {
 		}
 
 		Consumer<TodoList> redoCommand = redoCommands.pop();
-		executeOnTodoList(redoCommand); 
+		executeOnTodoList(redoCommand);
 	}
 
 	private void executeOnTodoList(Consumer<TodoList> todoListCommand) {
 		todoListCommand.accept(todoList);
 	}
-	
+
 	@Override
 	public String toString() {
 		return todoList.toString();
 	}
-	
-	private class UndoRedoCommand{
+
+	private class UndoRedoCommand {
 		private final Consumer<TodoList> undoCommand;
 		private final Consumer<TodoList> redoCommand;
 
@@ -100,12 +100,12 @@ public class UndoableTodoList implements IPlanToDoThings {
 			this.undoCommand = undoCommand;
 			this.redoCommand = redoCommand;
 		}
-		
-		private Consumer<TodoList> undoCommmand(){
+
+		private Consumer<TodoList> undoCommmand() {
 			return undoCommand;
 		}
-		
-		private Consumer<TodoList> redoCommmand(){
+
+		private Consumer<TodoList> redoCommmand() {
 			return redoCommand;
 		}
 	}
