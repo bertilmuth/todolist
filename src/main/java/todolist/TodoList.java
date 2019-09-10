@@ -43,8 +43,9 @@ class TodoList implements IPlanToDoThings {
 		return items.size();
 	}
 	
-	void insertItem(int itemNumber, Item itemToBeInserted) {
-		items.add(itemNumber, itemToBeInserted);
+	void insertItem(int itemNumber, String itemText) {
+		Item item = new Item(itemText);
+		items.add(itemNumber, item);
 	}
 
 	private void ifInvalidThrowIllegalArgumentException(int itemNumber) {

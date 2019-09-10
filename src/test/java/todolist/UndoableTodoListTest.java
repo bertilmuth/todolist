@@ -41,6 +41,15 @@ public class UndoableTodoListTest {
 	}
 	
 	@Test
+	public void undoing_adding_one_item_and_redoing_works() {
+		todoList.addItem(FIRST_ITEM);
+		todoList.undo();
+		todoList.redo();
+		assertEquals(1, todoList.numberOfItems());
+		assertEquals(FIRST_ITEM, todoList.itemText(0));
+	}
+	
+	@Test
 	public void undoing_adding_one_item_works() {
 		todoList.addItem(FIRST_ITEM);
 		todoList.undo();
@@ -113,6 +122,16 @@ public class UndoableTodoListTest {
 		todoList.undo();
 		assertEquals(1, todoList.numberOfItems());
 		assertEquals(OLD_TEXT, todoList.itemText(0));
+	}
+	
+	@Test
+	public void editing_item_undoing_and_redoing_leaves_new_item_text() {
+		todoList.addItem(OLD_TEXT);
+		todoList.editItem(0, NEW_TEXT);
+		todoList.undo();
+		todoList.redo();
+		assertEquals(1, todoList.numberOfItems());
+		assertEquals(NEW_TEXT, todoList.itemText(0));
 	}
 	
 	@Test
