@@ -1,0 +1,46 @@
+version = '0.1'
+
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'maven'
+
+sourceCompatibility = 8
+targetCompatibility = 8
+
+repositories {
+	mavenCentral()
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Simple to do list app to demonstrate undo functionality',
+                   'Implementation-Version': version
+	}
+}
+
+dependencies {
+  	testCompile 'junit:junit:4.12'
+}
+repositories {
+	mavenCentral()
+}
+
+application {
+    mainClassName = 'todolist.main.TodoListApp'
+}
+
+task javadocJar(type: Jar) {
+	classifier = 'javadoc'
+	from javadoc
+}
+
+task sourcesJar(type: Jar) {
+	classifier = 'sources'
+	from sourceSets.main.allSource
+}
+
+artifacts {
+	archives javadocJar, sourcesJar
+}
