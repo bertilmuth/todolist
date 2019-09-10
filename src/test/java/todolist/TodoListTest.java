@@ -11,7 +11,7 @@ public class TodoListTest {
 	private static final String OLD_TEXT = "Old text";
 	private static final String NEW_TEXT = "New text";
 	
-	private TodoList todoList;
+	private IPlanToDoThings todoList;
 
 	@Before
 	public void setUp() throws Exception {
