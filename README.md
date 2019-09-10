@@ -13,5 +13,5 @@ without changing  existing domain classes.
 
 
 # How it works internally
-* The [TodoList class](https://github.com/bertilmuth/todolist/blob/master/src/main/java/todolist/TodoList.java) represents the domain knowledge: you can add, remove and edit items. A simple, zero-based index called _itemNumber_ is used to access specific items. 
-* The [UndoableTodoList class](https://github.com/bertilmuth/todolist/blob/master/src/main/java/todolist/UndoableTodoList.java) is an adapter to the `TodoList` class that implements the same interface. Besides delegating to its own `TodoList` instance, it also keeps tracks of undo/redo commands.
+* The [TodoList class](https://github.com/bertilmuth/todolist/blob/master/src/main/java/todolist/domain/TodoList.java) represents the domain knowledge: you can add, remove and edit items. A simple, zero-based index called _itemNumber_ is used to access specific items. 
+* The [UndoableTodoList class](https://github.com/bertilmuth/todolist/blob/master/src/main/java/todolist/domain/UndoableTodoList.java) is an adapter to the `TodoList` class that implements the same interface. Besides delegating to its own `TodoList` instance, it also keeps tracks of undo/redo commands.
