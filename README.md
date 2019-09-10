@@ -1,4 +1,6 @@
 # What this project is about
+[![Build Status](https://travis-ci.org/bertilmuth/todolist.svg?branch=master)](https://travis-ci.org/bertilmuth/todolist)
+
 This project is a small to do list app that allows users to add, remove and edit to do list items.
 The whole purpose of this app is to showcase which patterns to use for undoing/redoing user actions,
 without changing  existing domain classes.
