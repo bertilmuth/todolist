@@ -3,7 +3,7 @@ package todolist;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TodoList implements IPlanToDoThings {
+class TodoList implements IPlanToDoThings {
 	private final List<Item> items;
 
 	public TodoList() {

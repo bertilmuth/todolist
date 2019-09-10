@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TodoListTest {
+public class UndoableTodoListTest {
 	private static final String FIRST_ITEM = "First item";
 	private static final String SECOND_ITEM = "Second item";
 	private static final String OLD_TEXT = "Old text";
