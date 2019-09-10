@@ -1,4 +1,4 @@
-package todolist;
+package todolist.domain;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -81,5 +81,10 @@ public class UndoableTodoList implements IPlanToDoThings {
 
 	private void executeOnTodoList(Consumer<TodoList> todoListCommand) {
 		todoListCommand.accept(todoList);
+	}
+	
+	@Override
+	public String toString() {
+		return todoList.toString();
 	}
 }

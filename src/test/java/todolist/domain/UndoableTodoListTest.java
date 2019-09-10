@@ -1,9 +1,11 @@
-package todolist;
+package todolist.domain;
 
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import todolist.domain.UndoableTodoList;
 
 public class UndoableTodoListTest {
 	private static final String FIRST_ITEM = "First item";

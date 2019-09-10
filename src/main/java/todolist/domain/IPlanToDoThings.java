@@ -1,4 +1,4 @@
-package todolist;
+package todolist.domain;
 
 public interface IPlanToDoThings {
 

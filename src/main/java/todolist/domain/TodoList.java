@@ -1,4 +1,4 @@
-package todolist;
+package todolist.domain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,5 +68,16 @@ class TodoList implements IPlanToDoThings {
 		public String text() {
 			return text;
 		}
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("Your Todos Are:\n");
+		for (Item item : items) {
+			stringBuilder.append(item.text());
+			stringBuilder.append('\n');
+		}
+		return stringBuilder.toString();
 	}
 }
