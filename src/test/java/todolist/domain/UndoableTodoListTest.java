@@ -27,8 +27,28 @@ public class UndoableTodoListTest {
 	}
 	
 	@Test
+	public void undoing_new_todolist_is_silent() {
+		todoList.undo();
+		assertEquals(0, todoList.numberOfItems());
+	}
+	
+	@Test
+	public void redoing_new_todolist_is_silent() {
+		todoList.redo();
+		assertEquals(0, todoList.numberOfItems());
+	}
+	
+	@Test
 	public void adding_one_item_works() {
 		todoList.addItem(FIRST_ITEM);
+		assertEquals(1, todoList.numberOfItems());
+		assertEquals(FIRST_ITEM, todoList.itemText(0));
+	}
+	
+	@Test
+	public void redoing_after_adding_one_item_is_silent() {
+		todoList.addItem(FIRST_ITEM);
+		todoList.redo();
 		assertEquals(1, todoList.numberOfItems());
 		assertEquals(FIRST_ITEM, todoList.itemText(0));
 	}

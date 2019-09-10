@@ -6,49 +6,49 @@ import java.util.function.Consumer;
 
 public class UndoableTodoList implements IPlanToDoThings {
 	private final TodoList todoList;
-	private final Deque<Consumer<TodoList>> todoListUndoCommands;
-	private final Deque<Consumer<TodoList>> todoListRedoCommands;
+	private final Deque<UndoRedoCommand> undoRedoCommands;
+	private final Deque<Consumer<TodoList>> redoCommands;
 
 	public UndoableTodoList() {
 		this.todoList = new TodoList();
-		this.todoListRedoCommands = new ArrayDeque<>();
-		this.todoListUndoCommands = new ArrayDeque<>();
+		this.undoRedoCommands = new ArrayDeque<>();
+		this.redoCommands = new ArrayDeque<>();
+	}
+	
+	void process(final Consumer<TodoList> undoCommand, final Consumer<TodoList> redoCommand) {
+		executeOnTodoList(redoCommand);
+		UndoRedoCommand undoRedoCommand = new UndoRedoCommand(undoCommand, redoCommand);
+		undoRedoCommands.push(undoRedoCommand);
 	}
 
 	@Override
 	public void addItem(String itemText) {
 		final int newItemNumber = numberOfItems();
 
-		final Consumer<TodoList> command = todoList -> todoList.addItem(itemText);
-		executeOnTodoList(command);
-		todoListRedoCommands.push(command);
-
 		final Consumer<TodoList> undoCommand = todoList -> todoList.removeItem(newItemNumber);
-		todoListUndoCommands.push(undoCommand);
+		final Consumer<TodoList> redoCommand = todoList -> todoList.addItem(itemText);
+
+		process(undoCommand, redoCommand);
 	}
+
+
 
 	@Override
 	public void removeItem(int itemNumber) {
 		final String itemToBeRemovedText = todoList.item(itemNumber).text();
 		
-		final Consumer<TodoList> command = todoList -> todoList.removeItem(itemNumber);
-		executeOnTodoList(command);
-		todoListRedoCommands.push(command);
-		
 		final Consumer<TodoList> undoCommand = todoList -> todoList.insertItem(itemNumber, itemToBeRemovedText);
-		todoListUndoCommands.push(undoCommand);
+		final Consumer<TodoList> redoCommand = todoList -> todoList.removeItem(itemNumber);
+		process(undoCommand, redoCommand);
 	}
 
 	@Override
 	public void editItem(int itemNumber, String newText) {
 		final String oldText = todoList.itemText(itemNumber);
 		
-		final Consumer<TodoList> command = todoList -> todoList.editItem(itemNumber, newText);
-		executeOnTodoList(command);
-		todoListRedoCommands.push(command);
-		
 		final Consumer<TodoList> undoCommand = todoList -> todoList.editItem(itemNumber, oldText);
-		todoListUndoCommands.push(undoCommand);
+		final Consumer<TodoList> redoCommand = todoList -> todoList.editItem(itemNumber, newText);
+		process(undoCommand, redoCommand);
 	}
 
 	@Override
@@ -62,21 +62,25 @@ public class UndoableTodoList implements IPlanToDoThings {
 	}
 
 	public void undo() {
-		if (todoListUndoCommands.isEmpty()) {
+		if (undoRedoCommands.isEmpty()) {
 			return;
 		}
 
-		Consumer<TodoList> undoCommand = todoListUndoCommands.pop();
+		UndoRedoCommand undoRedoCommand = undoRedoCommands.pop();
+		Consumer<TodoList> undoCommand = undoRedoCommand.undoCommmand();
+		Consumer<TodoList> redoCommand = undoRedoCommand.redoCommmand();
+		
 		executeOnTodoList(undoCommand);
+		redoCommands.push(redoCommand);
 	}
 
 	public void redo() {
-		if (todoListRedoCommands.isEmpty()) {
+		if (redoCommands.isEmpty()) {
 			return;
 		}
 
-		Consumer<TodoList> redoCommand = todoListRedoCommands.pop();
-		executeOnTodoList(redoCommand);
+		Consumer<TodoList> redoCommand = redoCommands.pop();
+		executeOnTodoList(redoCommand); 
 	}
 
 	private void executeOnTodoList(Consumer<TodoList> todoListCommand) {
@@ -86,5 +90,23 @@ public class UndoableTodoList implements IPlanToDoThings {
 	@Override
 	public String toString() {
 		return todoList.toString();
+	}
+	
+	private class UndoRedoCommand{
+		private final Consumer<TodoList> undoCommand;
+		private final Consumer<TodoList> redoCommand;
+
+		private UndoRedoCommand(Consumer<TodoList> undoCommand, Consumer<TodoList> redoCommand) {
+			this.undoCommand = undoCommand;
+			this.redoCommand = redoCommand;
+		}
+		
+		private Consumer<TodoList> undoCommmand(){
+			return undoCommand;
+		}
+		
+		private Consumer<TodoList> redoCommmand(){
+			return redoCommand;
+		}
 	}
 }
