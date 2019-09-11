@@ -33,10 +33,10 @@ public class UndoableTodoList implements IPlanToDoThings {
 
 	@Override
 	public void removeItem(int itemNumber) {
-		final String itemToBeRemovedText = todoList.item(itemNumber).text();
+		final String itemText = todoList.item(itemNumber).text();
 
 		final Consumer<TodoList> command = todoList -> todoList.removeItem(itemNumber);
-		final Consumer<TodoList> undoCommand = todoList -> todoList.insertItem(itemNumber, itemToBeRemovedText);
+		final Consumer<TodoList> undoCommand = todoList -> todoList.insertItem(itemNumber, itemText);
 
 		processCommandAndUndoCommand(command, undoCommand);
 	}
